@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Box } from "@chakra-ui/react";
+import StarBackground from "./components/StarBackground.jsx";
 import AuthForm from "./components/AuthForm.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 
@@ -28,12 +29,15 @@ export default function App() {
   }, []);
 
   return (
-    <Box minH="100vh" bg="gray.50">
-      {token ? (
-        <Dashboard token={token} user={user} onLogout={logout} />
-      ) : (
-        <AuthForm onAuth={handleAuth} />
-      )}
+    <Box minH="100vh" position="relative">
+      <StarBackground />
+      <Box position="relative" zIndex={1}>
+        {token ? (
+          <Dashboard token={token} user={user} onLogout={logout} />
+        ) : (
+          <AuthForm onAuth={handleAuth} />
+        )}
+      </Box>
     </Box>
   );
 }

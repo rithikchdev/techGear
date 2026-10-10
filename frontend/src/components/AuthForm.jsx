@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Button, Heading, Input, Link, Stack, Text } from "@chakra-ui/react";
 import { api } from "../api.js";
+import { colors, panelProps, inputProps, primaryBtn } from "../ui.js";
 
 export default function AuthForm({ onAuth }) {
   const [mode, setMode] = useState("login");
@@ -27,14 +28,24 @@ export default function AuthForm({ onAuth }) {
   };
 
   return (
-    <Box maxW="420px" mx="auto" mt={16} p={8} bg="white" borderRadius="lg" shadow="md">
-      <Heading size="xl" mb={1}>
+    <Box
+      maxW="420px"
+      mx="auto"
+      mt={{ base: 12, md: 24 }}
+      p={8}
+      {...panelProps}
+      boxShadow="0 0 40px rgba(34, 211, 238, 0.08)"
+    >
+      <Text color={colors.accent} fontSize="sm" mb={3}>
+        {mode === "login" ? "$ auth --login" : "$ auth --register"}
+      </Text>
+      <Heading size="xl" mb={1} color={colors.text}>
         {mode === "login" ? "Welcome back" : "Create account"}
       </Heading>
-      <Text color="gray.600" mb={6}>
+      <Text color={colors.muted} fontSize="sm" mb={6}>
         {mode === "login"
-          ? "Log in to see your images."
-          : "Sign up to start uploading images."}
+          ? "Authenticate to access your images."
+          : "Register to start uploading images."}
       </Text>
 
       <Box as="form" onSubmit={submit}>
@@ -42,43 +53,56 @@ export default function AuthForm({ onAuth }) {
           {mode === "register" && (
             <Input
               name="name"
-              placeholder="Name"
+              placeholder="name"
               value={form.name}
               onChange={change}
               required
+              {...inputProps}
             />
           )}
           <Input
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="email"
             value={form.email}
             onChange={change}
             required
+            {...inputProps}
           />
           <Input
             name="password"
             type="password"
-            placeholder="Password (min 6 characters)"
+            placeholder="password (min 6 characters)"
             value={form.password}
             onChange={change}
             required
             minLength={6}
+            {...inputProps}
           />
 
-          {error && <Text color="red.600">{error}</Text>}
+          {error && (
+            <Text color={colors.danger} fontSize="sm">
+              ! {error}
+            </Text>
+          )}
 
-          <Button type="submit" colorPalette="blue" loading={busy}>
+          <Button type="submit" loading={busy} {...primaryBtn}>
             {mode === "login" ? "Log in" : "Sign up"}
           </Button>
+
+          {busy && (
+            <Text fontSize="xs" color={colors.muted}>
+              The server may be waking up. The first request can take up to a minute.
+            </Text>
+          )}
         </Stack>
       </Box>
 
-      <Text mt={5} fontSize="sm" color="gray.600">
+      <Text mt={6} fontSize="sm" color={colors.muted}>
         {mode === "login" ? "No account yet? " : "Already registered? "}
         <Link
           as="button"
-          color="blue.600"
+          color={colors.accent}
           onClick={() => {
             setError("");
             setMode(mode === "login" ? "register" : "login");

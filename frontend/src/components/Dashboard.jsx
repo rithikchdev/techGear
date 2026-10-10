@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { api } from "../api.js";
+import { colors, ghostBtn } from "../ui.js";
 import UploadForm from "./UploadForm.jsx";
 import ImageGallery from "./ImageGallery.jsx";
 import Recommendations from "./Recommendations.jsx";
@@ -63,19 +64,36 @@ export default function Dashboard({ token, user, onLogout }) {
 
   return (
     <Box maxW="1100px" mx="auto" px={4} py={8}>
-      <Flex justify="space-between" align="center" mb={8}>
+      <Flex
+        justify="space-between"
+        align="center"
+        mb={10}
+        pb={4}
+        borderBottomWidth="1px"
+        borderColor={colors.border}
+      >
         <Box>
-          <Heading size="2xl">My Images</Heading>
-          <Text color="gray.600">Signed in as {user?.name}</Text>
+          <Heading size="2xl" color={colors.text}>
+            <Text as="span" color={colors.accent}>
+              &gt;{" "}
+            </Text>
+            my_images
+          </Heading>
+          <Text color={colors.muted} fontSize="sm" mt={1}>
+            <Text as="span" color="#4ade80">
+              ●
+            </Text>{" "}
+            signed in as {user?.name}
+          </Text>
         </Box>
-        <Button variant="outline" onClick={onLogout}>
+        <Button onClick={onLogout} {...ghostBtn}>
           Log out
         </Button>
       </Flex>
 
       {error && (
-        <Text color="red.600" mb={4}>
-          {error}
+        <Text color={colors.danger} mb={4}>
+          ! {error}
         </Text>
       )}
 
@@ -90,6 +108,10 @@ export default function Dashboard({ token, user, onLogout }) {
       />
 
       <Recommendations image={selected} />
+
+      <Text mt={16} fontSize="xs" color={colors.muted} textAlign="center">
+        Recommendation links open Amazon search results.
+      </Text>
     </Box>
   );
 }
