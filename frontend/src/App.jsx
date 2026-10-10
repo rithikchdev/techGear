@@ -1,9 +1,39 @@
-import React from 'react'
+import { useState, useCallback } from "react";
+import { Box } from "@chakra-ui/react";
+import AuthForm from "./components/AuthForm.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 
-const App = () => {
+export default function App() {
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [user, setUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  });
+
+  const handleAuth = (newToken, newUser) => {
+    localStorage.setItem("token", newToken);
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setToken(newToken);
+    setUser(newUser);
+  };
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
+  }, []);
+
   return (
-    <div>App is live BADBOY</div>
-  )
+    <Box minH="100vh" bg="gray.50">
+      {token ? (
+        <Dashboard token={token} user={user} onLogout={logout} />
+      ) : (
+        <AuthForm onAuth={handleAuth} />
+      )}
+    </Box>
+  );
 }
-
-export default App
