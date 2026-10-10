@@ -11,6 +11,7 @@ const imageSchema = new mongoose.Schema(
         title: String,
         reason: String,
         searchQuery: String,
+        link: String,
       },
     ],
   },
