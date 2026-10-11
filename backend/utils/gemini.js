@@ -6,7 +6,6 @@ const buildAmazonLink = (query) => {
   const domain = process.env.AMAZON_DOMAIN || "www.amazon.in";
   const url = new URL(`https://${domain}/s`);
   url.searchParams.set("k", query);
-  if (process.env.AMAZON_TAG) url.searchParams.set("tag", process.env.AMAZON_TAG);
   return url.toString();
 };
 
